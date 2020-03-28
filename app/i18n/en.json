@@ -7,19 +7,52 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
-  "welcomeScreen": {
-    "poweredBy": "POWERED BY BOWSER",
-    "readyForLaunch": "Ready for launch.",
-    "continue": "CONTINUE"
+
+  "menuMainScreen": {
+    "header": "Main",
+    "btnLaunchGame": "Play !"
   },
-  "demoScreen": {
-    "howTo": "HOW TO",
-    "title": "What’s In This Stack?",
-    "tagLine": "Congratulations, you’ve got a very advanced React Native app template here.  Take advantage of this boilerplate!",
-    "reactotron": "Demo Reactotron",
-    "androidReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running, run adb reverse tcp:9090 tcp:9090 from your terminal, and reload the app.",
-    "iosReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app."
+
+  "menuAccountAccountScreen": {
+    "header": "Lorem"
   },
+
+  "menuAccountSignInScreen": {
+    "header": "Lorem"
+  },
+
+  "menuAccountSignUpScreen": {
+    "header": "Lorem"
+  },
+
+  "menuSettingsCguScreen": {
+    "header": "Lorem"
+  },
+
+  "menuSettingsNoticeScreen": {
+    "header": "Lorem"
+  },
+
+  "menuSettingsSettingsScreen": {
+    "header": "Lorem"
+  },
+
+  "gameEndAssemblyScreen": {
+    "header": "Lorem"
+  },
+
+  "gameEndScreen": {
+    "header": "Final"
+  },
+
+  "gameEnigmaQuizzScreen": {
+    "header": "Lorem"
+  },
+
+  "gameHomeScreen": {
+    "header": "Game Home Screen"
+  },
+
   "storybook": {
     "placeholder": "Placeholder",
     "field": "Field"
