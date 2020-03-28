@@ -18,6 +18,8 @@ import {
 
 export const RootNavigator = createStackNavigator(
   {
+    primaryStack: { screen: PrimaryNavigator },
+    menuMainScreen: { screen: MenuMainScreen },
     gameEndFinalScreen: { screen: GameEndFinalScreen },
     gameEndAssemblyScreen: { screen: GameEndAssemblyScreen },
     gameEnigmaQuizzScreen: { screen: GameEnigmaQuizzScreen },
@@ -28,8 +30,6 @@ export const RootNavigator = createStackNavigator(
     menuSettingsNoticeScreen: { screen: MenuSettingsNoticeScreen },
     menuSettingsCguScreen: { screen: MenuSettingsCguScreen },
     menuSettingsSettingsScreen: { screen: MenuSettingsSettingsScreen },
-    menuMainScreen: { screen: MenuMainScreen },
-    primaryStack: { screen: PrimaryNavigator },
   },
   {
     headerMode: "none",
