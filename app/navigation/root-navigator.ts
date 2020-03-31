@@ -14,11 +14,13 @@ import {
   GameEnigmaQuizzScreen,
   GameEndAssemblyScreen,
   GameEndFinalScreen,
+  GameEnigmaEndFinishScreen,
 } from "../screens" // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export const RootNavigator = createStackNavigator(
   {
     primaryStack: { screen: PrimaryNavigator },
+    gameEnigmaEndFinishScreen: { screen: GameEnigmaEndFinishScreen },
     menuMainScreen: { screen: MenuMainScreen },
     gameEndFinalScreen: { screen: GameEndFinalScreen },
     gameEndAssemblyScreen: { screen: GameEndAssemblyScreen },

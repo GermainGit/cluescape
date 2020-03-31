@@ -50,7 +50,13 @@
   },
 
   "gameHomeScreen": {
-    "header": "Game Home Screen"
+    "header": "Game Home Screen",
+    "addItem": "Gain new item"
+  },
+
+  "gameEnigmaEndFinishScreen": {
+    "completed": "Enigma completed",
+    "newItem": "You get a new element !"
   },
 
   "storybook": {
