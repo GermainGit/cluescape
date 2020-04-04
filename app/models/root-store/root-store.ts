@@ -19,6 +19,9 @@ export const RootStoreModel = types.model("RootStore")
     return ({
       addItem(item: Item) {
         self.items.push(item)
+      },
+      resetItem() {
+        self.items.clear()
       }
     })
   })

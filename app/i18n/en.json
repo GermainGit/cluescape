@@ -51,12 +51,13 @@
 
   "gameHomeScreen": {
     "header": "Game Home Screen",
-    "addItem": "Gain new item"
+    "addItem": "Obtenir un item",
+    "resetItem": "Enlever tout les items"
   },
 
   "gameEnigmaEndFinishScreen": {
-    "completed": "Enigma completed",
-    "newItem": "You get a new element !"
+    "completed": "Enigme réussi",
+    "newItem": "Félicitation, vous obtenez un nouvel objet !"
   },
 
   "storybook": {
