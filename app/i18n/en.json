@@ -10,7 +10,7 @@
 
   "menuMainScreen": {
     "header": "Main",
-    "btnLaunchGame": "Play !"
+    "btnLaunchGame": "Lancer la partie"
   },
 
   "menuAccountAccountScreen": {
