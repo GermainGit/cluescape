@@ -1,8 +1,9 @@
 import * as React from "react"
-import { Image, View } from "react-native"
+import { View } from "react-native"
 import { useObserver } from "mobx-react-lite"
-import { itemStyles as styles } from "./item.styles"
+import { itemStyles, itemStyles as styles } from "./item.styles"
 import { ItemType } from "../../models/item-store"
+import { Icon } from ".."
 
 export interface ItemProps {
   item: ItemType
@@ -14,10 +15,9 @@ export interface ItemProps {
  * Component description here for TypeScript tips.
  */
 export const Item: React.FunctionComponent<ItemProps> = props => {
-  const image = `~/app/assets/images/${props.item.img}`
   return useObserver(() => (
     <View style={styles.WRAPPER}>
-      {props.item.owned ? <Image style={styles.IMAGE} source={require(image)}/> : ""}
+      {props.item.owned ? <Icon style={itemStyles.IMAGE} icon={props.item.name}/> : null}
     </View>
   ))
 }

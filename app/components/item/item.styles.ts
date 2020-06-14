@@ -9,12 +9,13 @@ export const itemStyles = {
     backgroundColor: "#83949B",
 
     justifyContent: "center",
+    alignItems: "center",
 
     marginRight: 13,
     marginTop: 15,
   } as ViewStyle,
   IMAGE: {
-    height: 24,
-    width: 24,
+    height: 38,
+    width: 38,
   } as ImageStyle,
 }
