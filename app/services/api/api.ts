@@ -77,7 +77,6 @@ export class Api {
   /**
    * Gets a single user by ID
    */
-
   async getUser(id: string): Promise<Types.GetUserResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
@@ -98,5 +97,75 @@ export class Api {
     } catch {
       return { kind: "bad-data" }
     }
+  }
+
+  /**
+   * Gets a list of quizzResponses.
+   */
+  async getResponses(): Promise<Types.GetResponsesResult> {
+    /*
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get(`/quizzResponses`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    const convertQuizzResponse = raw => {
+      return {
+        id: raw.id,
+        name: raw.name,
+      }
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawQuizzReponses = response.data
+      const resultQuizzResponses: Types.QuizzResponse[] = rawQuizzReponses.map(convertQuizzResponse)
+      return { kind: "ok", quizzResponses: resultQuizzResponses }
+    } catch {
+      return { kind: "bad-data" }
+    }
+    */
+    return {
+      kind: "ok",
+      quizzResponses: [
+        { id: 0, name: "First Response" },
+        { id: 1, name: "Second Response" },
+        { id: 2, name: "Third Response" },
+        { id: 3, name: "Fourth Response" },
+      ]
+    }
+  }
+
+  /**
+   * Gets a single quizzQuestion.
+   */
+  async getQuestion(): Promise<Types.GetQuestionResult> {
+    /*
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get(`/question`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultQuestion: Types.QuizzQuestion = {
+        id: response.data.id,
+        name: response.data.name,
+      }
+      return { kind: "ok", quizzQuestion: resultQuestion }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  */
+    return { kind: "ok", quizzQuestion: { id: 0, name: "Question" } }
   }
 }

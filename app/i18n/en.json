@@ -46,11 +46,13 @@
   },
 
   "gameEnigmaQuizzScreen": {
-    "header": "Lorem"
+    "header": "ENIGME: QUIZZ",
+    "submit": "Choose this answer"
   },
 
   "gameHomeScreen": {
-    "header": "Game Home Screen"
+    "header": "Game Home Screen",
+    "testQuizz": "Test Quizz"
   },
 
   "storybook": {
