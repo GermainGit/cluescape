@@ -31,8 +31,6 @@ export const Inventory: React.FunctionComponent<InventoryProps> = props => {
     itemStore.addItem(item)
   }
 
-  console.log(itemStore.items.length)
-
   const hide = () => {
     props.visible(false)
   }
