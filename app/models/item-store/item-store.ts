@@ -2,6 +2,7 @@ import { Instance, types } from "mobx-state-tree"
 
 const ItemModel = types.model("ItemType")
   .props({
+    id: types.integer,
     name: types.string,
     img: types.string,
     owned: types.boolean,

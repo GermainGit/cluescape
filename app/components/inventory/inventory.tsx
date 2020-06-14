@@ -11,10 +11,10 @@ export interface InventoryProps {
 }
 
 const items: ItemType[] = [
-  { name: "bolt", img: "images/screw.png", owned: true },
-  { name: "bolt", img: "images/screw.png", owned: false },
-  { name: "bolt", img: "images/screw.png", owned: false },
-  { name: "bolt", img: "images/screw.png", owned: false },
+  { id: 0, name: "bolt", img: "images/screw.png", owned: true },
+  { id: 1, name: "bolt", img: "images/screw.png", owned: false },
+  { id: 2, name: "bolt", img: "images/screw.png", owned: false },
+  { id: 3, name: "bolt", img: "images/screw.png", owned: false },
 ]
 
 /**
