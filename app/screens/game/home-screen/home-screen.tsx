@@ -1,11 +1,10 @@
 import * as React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, Image, ImageStyle, Modal, TextStyle, View, ViewStyle } from "react-native"
-import { Button, Screen, Text } from "../../../components"
+import { Alert, Image, ImageStyle, Modal, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native"
+import { Button, Inventory, Screen, Text } from "../../../components"
 import { color } from "../../../theme"
 import { NavigationScreenProp } from "react-navigation"
-import { TouchableNativeFeedback } from "react-native-gesture-handler"
 
 export interface GameHomeScreenProps {
   navigation: NavigationScreenProp<{}>
@@ -150,9 +149,10 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
   ])
 
   const [modalVisible, setModalVisible] = useState(false)
+  const [inventoryVisible, setInventoryVisible] = useState(false)
 
   const openInventory = function() {
-    Alert.alert("Open inventory")
+    setInventoryVisible(true)
   }
 
   const closeGame = function() {
@@ -197,6 +197,15 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
           </View>
         </View>
       </Modal>
+      <Modal
+        animationType={"fade"}
+        visible={inventoryVisible}
+        transparent={true}
+      >
+        <View style={ModalContainerView}>
+          <Inventory visible={setInventoryVisible}/>
+        </View>
+      </Modal>
       <View style={ActionView}>
         <Button style={[ButtonActionView, ButtonActionDarkView]} onPress={closeGame}>
           <Image style={ActionImage} source={require("./cross.png")}/>
@@ -206,14 +215,14 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
         </Button>
       </View>
 
-      <TouchableNativeFeedback onPress={scan}>
+      <TouchableWithoutFeedback onPress={scan}>
         <View style={ScannerImageView}>
           <Image style={ScannerImage} source={require("./scanner.png")}/>
           <View style={ScannerMiddleView}/>
         </View>
-      </TouchableNativeFeedback>
+      </TouchableWithoutFeedback>
       <Button style={InventoryView} onPress={openInventory}>
-        <Image source={require("./inventory.png")}/>
+        <Image source={require("cluescape/app/assets/images/inventory.png")}/>
       </Button>
     </Screen>
   )
