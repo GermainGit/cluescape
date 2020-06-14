@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Dispatch, SetStateAction } from "react"
 import { TouchableWithoutFeedback, View } from "react-native"
 import { useObserver } from "mobx-react-lite"
 import { useStores } from "../../models/root-store"
@@ -7,14 +8,14 @@ import { ItemType } from "../../models/item-store"
 import { Item } from ".."
 
 export interface InventoryProps {
-  visible: (value: boolean) => {}
+  visible: Dispatch<SetStateAction<boolean>>
 }
 
 const items: ItemType[] = [
   { id: 0, name: "bolt", img: "images/screw.png", owned: true },
-  { id: 1, name: "bolt", img: "images/screw.png", owned: false },
-  { id: 2, name: "bolt", img: "images/screw.png", owned: false },
-  { id: 3, name: "bolt", img: "images/screw.png", owned: false },
+  { id: 1, name: "monitor", img: "images/monitor.png", owned: false },
+  { id: 2, name: "usb-stick", img: "images/usb.png", owned: false },
+  { id: 3, name: "controller", img: "images/screw.png", owned: false },
 ]
 
 /**
