@@ -17,7 +17,7 @@ export const Item: React.FunctionComponent<ItemProps> = props => {
   const image = `~/app/assets/images/${props.item.img}`
   return useObserver(() => (
     <View style={styles.WRAPPER}>
-      {props.item.owned ? <Image style={styles.IMAGE} source={}/> : ""}
+      {props.item.owned ? <Image style={styles.IMAGE} source={require(image)}/> : ""}
     </View>
   ))
 }
