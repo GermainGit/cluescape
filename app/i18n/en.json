@@ -52,7 +52,14 @@
 
   "gameHomeScreen": {
     "header": "Game Home Screen",
+    "addItem": "Obtenir un item",
+    "resetItem": "Enlever tout les items",
     "testQuizz": "Test Quizz"
+  },
+
+  "gameEnigmaEndFinishScreen": {
+    "completed": "Enigme réussi",
+    "newItem": "Félicitation, vous obtenez un nouvel objet !"
   },
 
   "storybook": {

@@ -5,6 +5,7 @@ import { Alert, Image, ImageStyle, Modal, TextStyle, TouchableWithoutFeedback, V
 import { Button, Inventory, Screen, Text } from "../../../components"
 import { color } from "../../../theme"
 import { NavigationScreenProp } from "react-navigation"
+import { useStores } from "../../../models/root-store"
 
 export interface GameHomeScreenProps {
   navigation: NavigationScreenProp<{}>
@@ -145,6 +146,12 @@ const ROOT: ViewStyle = {
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
   const leave = React.useMemo(() => () =>
     props.navigation.navigate("menuMainScreen"), [
+    props.navigation,
+  ])
+
+  const store = useStores()
+  const finishEnigma = React.useMemo(() => () =>
+    props.navigation.navigate("gameEnigmaEndFinishScreen"), [
     props.navigation,
   ])
 
