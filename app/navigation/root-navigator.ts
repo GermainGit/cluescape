@@ -1,20 +1,18 @@
 import { createStackNavigator } from "react-navigation-stack"
 import { PrimaryNavigator } from "./primary-navigator"
-
 // prettier-ignore
 import {
-  MenuMainScreen,
-  MenuSettingsSettingsScreen,
-  MenuSettingsCguScreen,
-  MenuSettingsNoticeScreen,
+  GameEndAssemblyScreen,
+  GameEnigmaEndFinishScreen,
+  GameEnigmaQuizzScreen,
+  GameHomeScreen,
   MenuAccountAccountScreen,
   MenuAccountSignInScreen,
   MenuAccountSignUpScreen,
-  GameHomeScreen,
-  GameEnigmaQuizzScreen,
-  GameEndAssemblyScreen,
-  GameEndFinalScreen,
-  GameEnigmaEndFinishScreen,
+  MenuMainScreen,
+  MenuSettingsCguScreen,
+  MenuSettingsNoticeScreen,
+  MenuSettingsSettingsScreen,
 } from "../screens" // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export const RootNavigator = createStackNavigator(
@@ -22,7 +20,6 @@ export const RootNavigator = createStackNavigator(
     primaryStack: { screen: PrimaryNavigator },
     gameEnigmaEndFinishScreen: { screen: GameEnigmaEndFinishScreen },
     menuMainScreen: { screen: MenuMainScreen },
-    gameEndFinalScreen: { screen: GameEndFinalScreen },
     gameEndAssemblyScreen: { screen: GameEndAssemblyScreen },
     gameEnigmaQuizzScreen: { screen: GameEnigmaQuizzScreen },
     gameHomeScreen: { screen: GameHomeScreen },

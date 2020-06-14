@@ -1,15 +1,13 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { Image, ImageStyle, SafeAreaView, TextStyle, ViewStyle } from "react-native"
-import { Screen, Text } from "../../../../components"
+import { ImageStyle, SafeAreaView, TextStyle, ViewStyle } from "react-native"
+import { Icon, Screen, Text } from "../../../../components"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../../models/root-store"
-import { Item } from "../../../../models/item"
 import { TouchableNativeFeedback } from "react-native-gesture-handler"
 
 export interface GameEnigmaEndFinishScreenProps {
-  navigation: NavigationScreenProp<{}>,
-  item: Item
+  navigation: NavigationScreenProp<{}>
 }
 
 const ROOT: ViewStyle = {
@@ -36,8 +34,8 @@ const ImageViewItem: ViewStyle = {
 }
 
 const ImageItem: ImageStyle = {
-  width: 64,
-  height: 64
+  width: 128,
+  height: 128,
 }
 
 const TextNewItem: TextStyle = {
@@ -45,23 +43,15 @@ const TextNewItem: TextStyle = {
 }
 
 export const GameEnigmaEndFinishScreen: React.FunctionComponent<GameEnigmaEndFinishScreenProps> = observer((props) => {
-  const store = useStores()
+  const itemStore = useStores().itemStore
   const goHome = React.useMemo(() => () =>
     props.navigation.navigate("gameHomeScreen"), [
     props.navigation,
   ])
 
-  const item: Item = { name: "test", image: "../../assets/items/fuse.png" }
+  const item = itemStore.getReward()
+  item.setOwned()
 
-  if (
-    store.items.find((storedItem) => item.name === storedItem.name)
-  ) {
-    goHome()
-    return (<Screen preset="fixed">
-    </Screen>)
-  }
-
-  store.addItem(item)
 
   return (
     <Screen style={ROOT} preset="fixed">
@@ -76,7 +66,7 @@ export const GameEnigmaEndFinishScreen: React.FunctionComponent<GameEnigmaEndFin
           tx="gameEnigmaEndFinishScreen.newItem"
         />
         <SafeAreaView style={ImageViewItem}>
-          <Image style={ImageItem} source={require('../../assets/items/fuse.png')} />
+          <Icon style={ImageItem} icon={item.name}/>
         </SafeAreaView>
       </TouchableNativeFeedback>
     </Screen>

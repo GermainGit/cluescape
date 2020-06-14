@@ -4,19 +4,11 @@ import { TouchableWithoutFeedback, View } from "react-native"
 import { useObserver } from "mobx-react-lite"
 import { useStores } from "../../models/root-store"
 import { inventoryStyles as styles } from "./inventory.styles"
-import { ItemType } from "../../models/item-store"
 import { Item } from ".."
 
 export interface InventoryProps {
   visible: Dispatch<SetStateAction<boolean>>
 }
-
-const items: ItemType[] = [
-  { id: 0, name: "screw", owned: true },
-  { id: 1, name: "monitor", owned: false },
-  { id: 2, name: "usb", owned: false },
-  { id: 3, name: "controller", owned: false },
-]
 
 /**
  * React.FunctionComponent for your hook(s) needs
@@ -25,11 +17,7 @@ const items: ItemType[] = [
  */
 export const Inventory: React.FunctionComponent<InventoryProps> = props => {
   const itemStore = useStores().itemStore
-  itemStore.clear()
-
-  for (const item of items) {
-    itemStore.addItem(item)
-  }
+  itemStore.init()
 
   const hide = () => {
     props.visible(false)

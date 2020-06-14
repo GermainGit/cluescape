@@ -144,16 +144,17 @@ const ROOT: ViewStyle = {
 }
 
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
+  const store = useStores()
+
   const leave = React.useMemo(() => () =>
     props.navigation.navigate("menuMainScreen"), [
     props.navigation,
   ])
 
-  const store = useStores()
-  const finishEnigma = React.useMemo(() => () =>
-    props.navigation.navigate("gameEnigmaEndFinishScreen"), [
-    props.navigation,
-  ])
+  const quizzEnigma = React.useMemo(
+    () => () => props.navigation.navigate("gameEnigmaQuizzScreen"), [
+      props.navigation,
+    ])
 
   const [modalVisible, setModalVisible] = useState(false)
   const [inventoryVisible, setInventoryVisible] = useState(false)
@@ -163,6 +164,7 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
   }
 
   const closeGame = function() {
+    store.reset()
     setModalVisible(true)
   }
 
@@ -171,7 +173,7 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
   }
 
   const scan = function() {
-    Alert.alert("Scan")
+    quizzEnigma()
   }
 
   return (
@@ -229,7 +231,7 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
         </View>
       </TouchableWithoutFeedback>
       <Button style={InventoryView} onPress={openInventory}>
-        <Image source={require("cluescape/app/assets/images/inventory.png")}/>
+        <Image source={require("./inventory.png")}/>
       </Button>
     </Screen>
   )

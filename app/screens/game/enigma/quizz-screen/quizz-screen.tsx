@@ -1,11 +1,21 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, SafeAreaView, TextStyle, FlatList, TouchableOpacity, Image, ImageStyle, Alert } from "react-native"
-import { Screen, Text, Wallpaper, Header, Button } from "../../../../components"
-// import { useStores } from "../models/root-store"
+import {
+  Alert,
+  FlatList,
+  Image,
+  ImageStyle,
+  SafeAreaView,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
+import { Button, Header, Screen, Text, Wallpaper } from "../../../../components"
 import { color, spacing } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { palette } from "../../../../theme/palette"
+import { useStores } from "../../../../models/root-store"
 
 const character = require("./character3.png")
 
@@ -169,14 +179,16 @@ export interface GameEnigmaQuizzScreenProps {
 }
 
 export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScreenProps> = observer((props) => {
+  const itemStore = useStores().itemStore
+  itemStore.setReward(1)
   const answers = [
     {
-      id: '0',
-      title: 'Once',
+      id: "0",
+      title: "Once",
     },
     {
-      id: '1',
-      title: 'Twice',
+      id: "1",
+      title: "Twice",
     },
     {
       id: '2',
@@ -189,7 +201,7 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
   ]
 
   const question = {
-    title: 'Have you ever try React?',
+    title: "Have you ever try React ?",
   }
 
   const [selected, setSelected] = React.useState(new Map())
@@ -206,7 +218,7 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
 
   const submit = React.useMemo(
     () => () => {
-      selected.has('0') ? props.navigation.navigate("gameHomeScreen") : Alert.alert("La réponse est fausse")
+      selected.has("0") ? props.navigation.navigate("gameEnigmaEndFinishScreen") : Alert.alert("La réponse est fausse")
     },
     [props.navigation, selected]
   )
