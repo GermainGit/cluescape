@@ -1,3 +1,7 @@
+require("../app/components/quit-enigma/quit-enigma.story")
+require("../app/components/quit-enigma/quit-enigma.story")
+require("../app/components/quit-enigma/quit-enigma.story")
+require("../app/components/quit-enigma/quit-enigma.story")
 require("../app/components/item/item.story")
 require("../app/components/inventory/inventory.story")
 require("../app/components/text/text.story")
