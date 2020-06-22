@@ -51,6 +51,7 @@ export const EnigmaStoreModel = types
     reset() {
       self.enigmas.clear()
       this.set(enigmas)
+      self.currentEnigmaName = ""
     },
 
     remaining: function() {

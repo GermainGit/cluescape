@@ -11,7 +11,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Button, Header, Screen, Text, Wallpaper } from "../../../../components"
+import { Button, Header, HelpQuit, Screen, Text, Wallpaper } from "../../../../components"
 import { color, spacing } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { palette } from "../../../../theme/palette"
@@ -236,6 +236,7 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
     <View style={FULL}>
       <Wallpaper />
       <Screen style={QUIZZ_CONTAINER} preset="fixed" backgroundColor={color.transparent}>
+        <HelpQuit parentScreenNavProp={props.navigation}/>
         <View style={QUIZZ}>
           <Header headerTx="gameEnigmaQuizzScreen.header" style={HEADER} titleStyle={HEADER_TITLE} />
           <Text style={QUESTION_STYLE} text={question.title}></Text>
