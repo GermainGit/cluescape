@@ -222,14 +222,13 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
   const submit = React.useMemo(
     () => () => {
       if (selected.has("0")) {
-        enigma.isFinish = true
-        store.enigmaStore.next()
+        store.enigmaStore.finish(enigma)
         props.navigation.navigate("gameEnigmaEndFinishScreen")
       } else {
         Alert.alert("La réponse est fausse")
       }
     },
-    [props.navigation, selected, enigma],
+    [props.navigation, selected],
   )
 
   return (

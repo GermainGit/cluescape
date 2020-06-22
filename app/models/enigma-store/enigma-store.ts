@@ -19,6 +19,13 @@ const enigmas: EnigmaType[] = [
     item: 3,
     screen: "gameEnigmaQuizzScreen",
   },
+  {
+    name: "End",
+    help: "",
+    item: 0,
+    screen: "",
+    isFinish: true,
+  },
 ]
 
 const EnigmaModel = types.model("EnigmaType")
@@ -30,8 +37,8 @@ const EnigmaModel = types.model("EnigmaType")
     isFinish: types.optional(types.boolean, false),
   })
   .actions(self => ({
-    finish() {
-      self.isFinish = true
+    isEnigmaEnd() {
+      return self.name.toLowerCase() === 'end'
     },
   }))
 
@@ -54,6 +61,15 @@ export const EnigmaStoreModel = types
       self.currentEnigmaName = ""
     },
 
+    enigmaEnd() {
+      return self.enigmas[self.enigmas.length - 1]
+    },
+
+    finish(enigma: EnigmaType) {
+      const index = self.enigmas.findIndex((enigmaS) => enigmaS.name === enigma.name)
+      self.enigmas[index].isFinish = true
+    },
+
     remaining: function() {
       return self.enigmas.filter(enigma => !enigma.isFinish).length
     },
@@ -65,13 +81,14 @@ export const EnigmaStoreModel = types
     },
 
     next(): EnigmaType {
-      const next = self.enigmas[Math.floor(Math.random() * self.enigmas.length)]
-
-      if (next.isFinish) {
-        return this.next()
+      console.log(self.enigmas)
+      if (!this.remaining()) {
+        return this.enigmaEnd()
       }
 
+      const next = self.enigmas.filter(enigma => !enigma.isFinish)[Math.floor(Math.random() * this.remaining())]
       self.currentEnigmaName = next.name
+
       return next
     },
 
