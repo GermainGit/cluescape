@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "946509167332",
+    "firebase_url": "https://cluescape-e414c.firebaseio.com",
+    "project_id": "cluescape-e414c",
+    "storage_bucket": "cluescape-e414c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946509167332:android:e1bc9d22d65b32babecaf1",
+        "android_client_info": {
+          "package_name": "com.cluescape"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946509167332-ujfo7ikd5a2r42rbahgfkag15nadqmjc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6ouOSVF9cYY7ANFBIFD7fJCE7IjLyYwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946509167332-ujfo7ikd5a2r42rbahgfkag15nadqmjc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

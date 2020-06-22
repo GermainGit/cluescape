@@ -10,11 +10,16 @@
 
   "menuMainScreen": {
     "header": "Main",
-    "btnLaunchGame": "Play !"
+    "btnLaunchGame": "Lancer la partie",
+    "btnConnect": "Lancer enigme"
   },
 
   "menuAccountAccountScreen": {
     "header": "Lorem"
+  },
+
+  "gameEnigmaColorCameraScreen": {
+    "header": "ENIGME COLOR"
   },
 
   "menuAccountSignInScreen": {
