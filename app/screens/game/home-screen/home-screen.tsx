@@ -145,19 +145,18 @@ const ROOT: ViewStyle = {
 
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
   const store = useStores()
-  const enigma = store.enigmaStore.next()
 
-  const leave = React.useMemo(() => () =>
-    props.navigation.navigate("menuMainScreen"), [
-    props.navigation,
-  ])
+  const leave = React.useMemo(() => () => {
+    props.navigation.navigate("menuMainScreen")
+  },
+  [props.navigation])
 
-  const launchEnigma = function() {
-    React.useMemo(
-      () => () => props.navigation.navigate(enigma.screen), [
-        props.navigation,
-      ])
-  }
+  const launchEnigma = React.useMemo(
+    () => () => {
+      const enigma = store.enigmaStore.next()
+      props.navigation.navigate(enigma.screen)
+    },
+    [props.navigation])
 
   const [modalVisible, setModalVisible] = useState(false)
   const [inventoryVisible, setInventoryVisible] = useState(false)
@@ -172,7 +171,10 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
   }
 
   const askHelp = function() {
-    Alert.alert(enigma.help)
+    Alert.alert(
+      "Aide",
+      `Rechercher les indices qui vous meneront à la prochaine énigme. Il vous reste ${store.enigmaStore.remaining()} énigme(s) à trouver`,
+    )
   }
 
   const scan = function() {
