@@ -145,16 +145,19 @@ const ROOT: ViewStyle = {
 
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
   const store = useStores()
+  const enigma = store.enigmaStore.next()
 
   const leave = React.useMemo(() => () =>
     props.navigation.navigate("menuMainScreen"), [
     props.navigation,
   ])
 
-  const quizzEnigma = React.useMemo(
-    () => () => props.navigation.navigate("gameEnigmaQuizzScreen"), [
-      props.navigation,
-    ])
+  const launchEnigma = function() {
+    React.useMemo(
+      () => () => props.navigation.navigate(enigma.screen), [
+        props.navigation,
+      ])
+  }
 
   const [modalVisible, setModalVisible] = useState(false)
   const [inventoryVisible, setInventoryVisible] = useState(false)
@@ -169,11 +172,11 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
   }
 
   const askHelp = function() {
-    Alert.alert("Ask help")
+    Alert.alert(enigma.help)
   }
 
   const scan = function() {
-    quizzEnigma()
+    launchEnigma()
   }
 
   return (

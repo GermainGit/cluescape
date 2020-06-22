@@ -7,7 +7,7 @@ const items: ItemType[] = [
   { id: 3, name: "controller" },
 ]
 
-const ItemModel = types.model("ItemType")
+export const ItemModel = types.model("ItemType")
   .props({
     id: types.number,
     name: types.string,
@@ -36,6 +36,7 @@ export const ItemStoreModel = types
       self.items.clear()
       this.init()
     },
+
     init() {
       if (self.items.length === 0) {
         for (const item of items) {
@@ -43,12 +44,15 @@ export const ItemStoreModel = types
         }
       }
     },
+
     setReward(id: number) {
       self.currentId = id
     },
+
     getReward() {
       return self.items.find(item => item.id === self.currentId)
     },
+
     clear() {
       self.items.clear()
     },

@@ -179,8 +179,10 @@ export interface GameEnigmaQuizzScreenProps {
 }
 
 export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScreenProps> = observer((props) => {
-  const itemStore = useStores().itemStore
-  itemStore.setReward(1)
+  const store = useStores()
+  const enigma = store.enigmaStore.current("quizz")
+  store.itemStore.setReward(enigma.item)
+
   const answers = [
     {
       id: "0",
