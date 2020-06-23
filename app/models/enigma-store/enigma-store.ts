@@ -23,7 +23,7 @@ const enigmas: EnigmaType[] = [
     name: "End",
     help: "Il ne faut pas relacher l'effort. Pas si proche du but... Il faut désormais raccorder les morceaux pour comprendre ce qu'il se trame...",
     item: 0,
-    screen: "",
+    screen: "gameEndAssemblyScreen",
     isFinish: true,
   },
 ]

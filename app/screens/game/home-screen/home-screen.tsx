@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, Image, ImageStyle, Modal, TouchableWithoutFeedback, View, ViewStyle } from "react-native"
+import { Image, ImageStyle, Modal, TouchableWithoutFeedback, View, ViewStyle } from "react-native"
 import { Button, HelpQuit, Inventory, Screen } from "../../../components"
 import { color } from "../../../theme"
 import { NavigationScreenProp } from "react-navigation"
@@ -64,11 +64,7 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
   const launchEnigma = React.useMemo(
     () => () => {
       const enigma = store.enigmaStore.next()
-      if (enigma.isEnigmaEnd()) {
-        Alert.alert('End', 'Fin du jeu !')
-      } else {
-        props.navigation.navigate(enigma.screen)
-      }
+      props.navigation.navigate(enigma.screen)
     },
     [props.navigation])
 
