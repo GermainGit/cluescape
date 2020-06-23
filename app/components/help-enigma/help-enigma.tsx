@@ -5,8 +5,6 @@ import { Button, Text } from "../"
 import { helpEnigmaStyles as styles } from "./help-enigma.styles"
 import { useStores } from "../../models/root-store"
 
-export interface HelpEnigmaProps {}
-
 const ActionText: TextStyle = {
   fontSize: 32,
 }
@@ -26,6 +24,10 @@ const ButtonActionLightView: ViewStyle = {
   backgroundColor: "#83949B",
 }
 
+export interface HelpEnigmaProps {
+  isEnigma: boolean
+}
+
 /**
  * React.FunctionComponent for your hook(s) needs
  *
@@ -33,12 +35,17 @@ const ButtonActionLightView: ViewStyle = {
  */
 export const HelpEnigma: React.FunctionComponent<HelpEnigmaProps> = props => {
   const enigmaStore = useStores().enigmaStore
-  const enigma = enigmaStore.find(enigmaStore.currentEnigmaName)
-  const help = enigma
-    ? enigma.help
-    : `Rechercher les indices qui vous meneront à la prochaine énigme. Il vous reste ${enigmaStore.remaining()} énigme(s) à trouver`
 
   const askHelp = function() {
+    const remaining = enigmaStore.remaining()
+    const enigma = remaining
+      ? enigmaStore.find(enigmaStore.currentEnigmaName)
+      : enigmaStore.enigmaEnd()
+
+    const help = (props.isEnigma && enigma) || !remaining
+      ? enigma.help
+      : `Rechercher les indices qui vous meneront à la prochaine énigme. Il vous reste ${enigmaStore.remaining()} énigme(s) à trouver`
+
     Alert.alert(
       "Aide",
       help,
