@@ -1,11 +1,13 @@
 import * as React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, Image, ImageStyle, Modal, TouchableWithoutFeedback, View, ViewStyle } from "react-native"
-import { Button, HelpQuit, Inventory, Screen } from "../../../components"
+import { Alert, ImageStyle, ViewStyle } from "react-native"
+import { Screen } from "../../../components"
 import { color } from "../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../models/root-store"
+// import QRCodeScanner from 'react-native-qrcode-scanner'
+import { RNCamera } from "react-native-camera"
 
 export interface GameHomeScreenProps {
   navigation: NavigationScreenProp<{}>
@@ -60,6 +62,7 @@ const ROOT: ViewStyle = {
 
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
   const store = useStores()
+  let camera;
 
   const launchEnigma = React.useMemo(
     () => () => {
@@ -78,34 +81,38 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
     setInventoryVisible(true)
   }
 
-  const scan = function() {
-    launchEnigma()
-  }
-
   return (
     <Screen style={ROOT} preset="fixed">
-      <Modal
-        animationType={"fade"}
-        visible={inventoryVisible}
-        transparent={true}
+      <RNCamera
+        ref={ref => {
+          camera = ref
+        }}
+        type={RNCamera.Constants.Type.back}
+        flashMode={RNCamera.Constants.FlashMode.on}
+        onGoogleVisionBarcodesDetected={launchEnigma}
       >
-        <View style={ModalContainerView}>
-          <Inventory visible={setInventoryVisible}/>
-        </View>
-      </Modal>
+      </RNCamera>
 
-      <HelpQuit parentScreenNavProp={props.navigation} isEnigma={false}/>
+      {/*<Modal*/}
+      {/*  animationType={"fade"}*/}
+      {/*  visible={inventoryVisible}*/}
+      {/*  transparent={true}*/}
+      {/*>*/}
+      {/*  <View style={ModalContainerView}>*/}
+      {/*    <Inventory visible={setInventoryVisible}/>*/}
+      {/*  </View>*/}
+      {/*</Modal>*/}
 
-      <TouchableWithoutFeedback onPress={scan}>
-        <View style={ScannerImageView}>
-          <Image style={ScannerImage} source={require("./scanner.png")}/>
-          <View style={ScannerMiddleView}/>
-        </View>
-      </TouchableWithoutFeedback>
+      {/*<HelpQuit parentScreenNavProp={props.navigation} isEnigma={false}/>*/}
 
-      <Button style={InventoryView} onPress={openInventory}>
-        <Image source={require("./inventory.png")}/>
-      </Button>
+      {/*<View style={ScannerImageView}>*/}
+      {/*  <Image style={ScannerImage} source={require("./scanner.png")}/>*/}
+      {/*  <View style={ScannerMiddleView}/>*/}
+      {/*</View>*/}
+
+      {/*<Button style={InventoryView} onPress={openInventory}>*/}
+      {/*  <Image source={require("./inventory.png")}/>*/}
+      {/*</Button>*/}
     </Screen>
   )
 })
