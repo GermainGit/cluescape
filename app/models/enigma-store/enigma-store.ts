@@ -84,7 +84,6 @@ export const EnigmaStoreModel = types
     },
 
     next(): EnigmaType {
-      console.log(self.enigmas)
       if (!this.remaining()) {
         return this.enigmaEnd()
       }
