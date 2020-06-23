@@ -44,6 +44,7 @@ const TextNewItem: TextStyle = {
 
 export const GameEnigmaEndFinishScreen: React.FunctionComponent<GameEnigmaEndFinishScreenProps> = observer((props) => {
   const itemStore = useStores().itemStore
+
   const goHome = React.useMemo(() => () =>
     props.navigation.navigate("gameHomeScreen"), [
     props.navigation,
@@ -51,7 +52,6 @@ export const GameEnigmaEndFinishScreen: React.FunctionComponent<GameEnigmaEndFin
 
   const item = itemStore.getReward()
   item.setOwned()
-
 
   return (
     <Screen style={ROOT} preset="fixed">
