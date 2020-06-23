@@ -7,7 +7,7 @@ import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 
 export interface GameEndAssemblyScreenProps {
-  navigation: NavigationScreenProp<{}>
+  navigation: NavigationScreenProp<{}>,
 }
 
 const ROOT: ViewStyle = {
@@ -49,6 +49,10 @@ const DROPZONE: ViewStyle = {
 }
 
 export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer((props) => {
+  const [showDraggable, setShowDraggable] = React.useState(true)
+
+  const opacity = React.useRef(new Animated.Value(1)).current
+
   const pan = React.useRef(new Animated.ValueXY()).current
 
   const panResponder = React.useRef(
@@ -68,15 +72,20 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
           { dx: pan.x, dy: pan.y }
         ]
       ),
-      onPanResponderRelease: () => {
-        // pan.flattenOffset()
-        Animated.spring(pan, {
-          toValue: {
-            x: (pan.x as any)._value,
-            y: (pan.y as any)._value
-          },
-          friction: 5
-        }).start()
+      onPanResponderRelease: (e, gesture) => {
+        if (gesture.moveY < 200) {
+          Animated.timing(opacity, {
+            toValue: 0,
+            duration: 1000
+          }).start(() =>
+            setShowDraggable(false)
+          )
+        } else {
+          Animated.spring(pan, {
+            toValue: { x: 0, y: 0 },
+            friction: 5
+          }).start()
+        }
       }
     })
   ).current
