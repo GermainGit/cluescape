@@ -21,7 +21,7 @@ const enigmas: EnigmaType[] = [
   },
   {
     name: "End",
-    help: "",
+    help: "Il ne faut pas relacher l'effort. Pas si proche du but... Il faut désormais raccorder les morceaux pour comprendre ce qu'il se trame...",
     item: 0,
     screen: "",
     isFinish: true,
@@ -62,7 +62,10 @@ export const EnigmaStoreModel = types
     },
 
     enigmaEnd() {
-      return self.enigmas[self.enigmas.length - 1]
+      const lastEnigma = self.enigmas[self.enigmas.length - 1]
+      self.currentEnigmaName = lastEnigma.name
+
+      return lastEnigma
     },
 
     finish(enigma: EnigmaType) {

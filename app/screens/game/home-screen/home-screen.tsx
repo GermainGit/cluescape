@@ -102,6 +102,7 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
           <View style={ScannerMiddleView}/>
         </View>
       </TouchableWithoutFeedback>
+
       <Button style={InventoryView} onPress={openInventory}>
         <Image source={require("./inventory.png")}/>
       </Button>

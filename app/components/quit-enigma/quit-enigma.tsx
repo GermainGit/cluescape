@@ -6,16 +6,6 @@ import { NavigationScreenProp } from "react-navigation"
 import { Button } from ".."
 import { useStores } from "../../models/root-store"
 
-const ActionView: ViewStyle = {
-  position: "absolute",
-  top: 15,
-  right: 0,
-
-  flexDirection: "column",
-  justifyContent: "space-around",
-  marginRight: -30,
-}
-
 const ModalButtonView: ViewStyle = {
   marginTop: 20,
   width: 200,
@@ -101,13 +91,8 @@ export interface QuitEnigmaProps {
  * Component description here for TypeScript tips.
  */
 export const QuitEnigma: React.FunctionComponent<QuitEnigmaProps> = props => {
-  let isEnigma = props.isEnigma
-  if (undefined === isEnigma) {
-    isEnigma = true
-  }
-
   const store = useStores()
-  const modalTitle = isEnigma ? 'Quitter l\'énigme ?' : 'Quitter le jeu ?'
+  const modalTitle = props.isEnigma ? 'Quitter l\'énigme ?' : 'Quitter le jeu ?'
 
   const leaveGame = React.useMemo(() => () =>
     props.parentScreenNavProp.navigate("menuMainScreen"), [
@@ -145,7 +130,7 @@ export const QuitEnigma: React.FunctionComponent<QuitEnigmaProps> = props => {
                 textStyle={ModalButtonText}
                 onPress={() => {
                   setModalVisible(false)
-                  if (!isEnigma) {
+                  if (!props.isEnigma) {
                     store.reset()
                     leaveGame()
                   } else {
