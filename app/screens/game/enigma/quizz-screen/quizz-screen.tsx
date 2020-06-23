@@ -11,7 +11,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Button, Header, Screen, Text, Wallpaper } from "../../../../components"
+import { Button, Header, HelpQuit, Screen, Text, Wallpaper } from "../../../../components"
 import { color, spacing } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { palette } from "../../../../theme/palette"
@@ -179,8 +179,11 @@ export interface GameEnigmaQuizzScreenProps {
 }
 
 export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScreenProps> = observer((props) => {
-  const itemStore = useStores().itemStore
-  itemStore.setReward(1)
+  const store = useStores()
+
+  const enigma = store.enigmaStore.find(store.enigmaStore.currentEnigmaName)
+  store.itemStore.setReward(enigma.item)
+
   const answers = [
     {
       id: "0",
@@ -218,15 +221,21 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
 
   const submit = React.useMemo(
     () => () => {
-      selected.has("0") ? props.navigation.navigate("gameEnigmaEndFinishScreen") : Alert.alert("La réponse est fausse")
+      if (selected.has("0")) {
+        store.enigmaStore.finish(enigma)
+        props.navigation.navigate("gameEnigmaEndFinishScreen")
+      } else {
+        Alert.alert("La réponse est fausse")
+      }
     },
-    [props.navigation, selected]
+    [props.navigation, selected],
   )
 
   return (
     <View style={FULL}>
       <Wallpaper />
       <Screen style={QUIZZ_CONTAINER} preset="fixed" backgroundColor={color.transparent}>
+        <HelpQuit parentScreenNavProp={props.navigation}/>
         <View style={QUIZZ}>
           <Header headerTx="gameEnigmaQuizzScreen.header" style={HEADER} titleStyle={HEADER_TITLE} />
           <Text style={QUESTION_STYLE} text={question.title}></Text>

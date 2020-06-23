@@ -1,9 +1,10 @@
 import * as React from "react"
-import { View, Modal, Image, ViewStyle, ImageStyle, TextStyle, Text } from "react-native"
+import { Image, ImageStyle, Modal, Text, TextStyle, View, ViewStyle } from "react-native"
 import { useObserver } from "mobx-react-lite"
 import { quitEnigmaStyles as styles } from "./quit-enigma.styles"
 import { NavigationScreenProp } from "react-navigation"
 import { Button } from ".."
+import { useStores } from "../../models/root-store"
 
 const ActionView: ViewStyle = {
   position: "absolute",
@@ -65,6 +66,7 @@ const ModalButtonStyle: ViewStyle = {
 }
 
 const ModalTitleText: TextStyle = {
+  color: "#F7F8E9",
   fontSize: 24,
 }
 
@@ -89,7 +91,8 @@ const ModalButtonFullText: TextStyle = {
 }
 
 export interface QuitEnigmaProps {
-  parentScreenNavProp: NavigationScreenProp<{}>;
+  parentScreenNavProp: NavigationScreenProp<{}>,
+  isEnigma?: boolean
 }
 
 /**
@@ -98,7 +101,20 @@ export interface QuitEnigmaProps {
  * Component description here for TypeScript tips.
  */
 export const QuitEnigma: React.FunctionComponent<QuitEnigmaProps> = props => {
-  const leave = React.useMemo(() => () =>
+  let isEnigma = props.isEnigma
+  if (undefined === isEnigma) {
+    isEnigma = true
+  }
+
+  const store = useStores()
+  const modalTitle = isEnigma ? 'Quitter l\'énigme ?' : 'Quitter le jeu ?'
+
+  const leaveGame = React.useMemo(() => () =>
+    props.parentScreenNavProp.navigate("menuMainScreen"), [
+    props.parentScreenNavProp,
+  ])
+
+  const leaveEnigma = React.useMemo(() => () =>
     props.parentScreenNavProp.navigate("gameHomeScreen"), [
     props.parentScreenNavProp,
   ])
@@ -111,11 +127,9 @@ export const QuitEnigma: React.FunctionComponent<QuitEnigmaProps> = props => {
 
   return useObserver(() => (
     <View style={styles.WRAPPER}>
-      <View style={ActionView}>
-        <Button style={[ButtonActionView, ButtonActionDarkView]} onPress={closeGame}>
-          <Image style={ActionImage} source={require("./cross.png")}/>
-        </Button>
-      </View>
+      <Button style={[ButtonActionView, ButtonActionDarkView]} onPress={closeGame}>
+        <Image style={ActionImage} source={require("./cross.png")}/>
+      </Button>
 
       <Modal
         animationType={"fade"}
@@ -124,14 +138,19 @@ export const QuitEnigma: React.FunctionComponent<QuitEnigmaProps> = props => {
       >
         <View style={ModalContainerView}>
           <View style={ModalView}>
-            <Text style={ModalTitleText}>Quitter l'enigme ?</Text>
+            <Text style={ModalTitleText}>{ modalTitle }</Text>
             <View style={ModalButtonView}>
               <Button
                 style={[ModalButtonStyle, ModalButtonBorder]}
                 textStyle={ModalButtonText}
                 onPress={() => {
                   setModalVisible(false)
-                  leave()
+                  if (!isEnigma) {
+                    store.reset()
+                    leaveGame()
+                  } else {
+                    leaveEnigma()
+                  }
                 }}
                 text={"Oui"}
               />
