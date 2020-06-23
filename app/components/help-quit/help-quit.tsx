@@ -4,11 +4,6 @@ import { useObserver } from "mobx-react-lite"
 import { HelpEnigma, QuitEnigma } from "../"
 import { NavigationScreenProp } from "react-navigation"
 
-export interface HelpQuitProps {
-  parentScreenNavProp: NavigationScreenProp<{}>,
-  isEnigma?: boolean,
-}
-
 const ActionView: ViewStyle = {
   position: "absolute",
   top: 15,
@@ -19,18 +14,26 @@ const ActionView: ViewStyle = {
   marginRight: -30,
 }
 
+export interface HelpQuitProps {
+  parentScreenNavProp: NavigationScreenProp<{}>,
+  isEnigma?: boolean,
+}
+
 /**
  * React.FunctionComponent for your hook(s) needs
  *
  * Component description here for TypeScript tips.
  */
 export const HelpQuit: React.FunctionComponent<HelpQuitProps> = props => {
-  // const { someStore } = useStores()
+  let isEnigma = props.isEnigma
+  if (undefined === isEnigma) {
+    isEnigma = true
+  }
 
   return useObserver(() => (
     <View style={ActionView}>
-      <QuitEnigma parentScreenNavProp={props.parentScreenNavProp} isEnigma={props.isEnigma}/>
-      <HelpEnigma/>
+      <QuitEnigma parentScreenNavProp={props.parentScreenNavProp} isEnigma={isEnigma}/>
+      <HelpEnigma isEnigma={isEnigma}/>
     </View>
   ))
 }
