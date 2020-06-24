@@ -11,15 +11,14 @@ export interface GameEndAssemblyScreenProps {
 }
 
 const ROOT: ViewStyle = {
-  flex: 1,
   backgroundColor: color.palette.black,
 }
 
 const BOX: ViewStyle = {
   backgroundColor: "skyblue",
-  width: 20 * 2,
-  height: 20 * 2,
-  borderRadius: 10
+  width: 30 * 2,
+  height: 30 * 2,
+  borderRadius: 30
 }
 
 const CONTAINER: ViewStyle = {
@@ -44,6 +43,8 @@ const TEXT_STYLE: TextStyle = {
 }
 
 const DROPZONE: ViewStyle = {
+  position: "relative",
+  top: 0,
   height: 200,
   backgroundColor: "#00334d"
 }
@@ -57,15 +58,7 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
 
   const panResponder = React.useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        return true
-      },
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: (pan.x as any)._value,
-          y: (pan.y as any)._value
-        })
-      },
+      onStartShouldSetPanResponder: () => true,
       onPanResponderMove: Animated.event(
         [
           null,
@@ -73,18 +66,16 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
         ]
       ),
       onPanResponderRelease: (e, gesture) => {
-        if (gesture.moveY < 200) {
+        if (gesture.moveY < 220) {
           Animated.timing(opacity, {
             toValue: 0,
             duration: 1000
-          }).start(() =>
-            setShowDraggable(false)
-          )
+          }).start(() => setShowDraggable(false))
         } else {
-          Animated.spring(pan, {
-            toValue: { x: 0, y: 0 },
-            friction: 5
-          }).start()
+          Animated.spring(
+            pan,
+            { toValue: { x: 0, y: 0 } }
+          ).start()
         }
       }
     })
@@ -93,19 +84,19 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
   return (
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="gameEndAssemblyScreen.header" />
+      <View style={DROPZONE}>
+        <Text style={ TEXT_STYLE }>Drop them here!</Text>
+      </View>
       <View style={CONTAINER}>
         <Text style={TITLE_TEXT}>Drag this box!</Text>
         <Animated.View
-          style={{
-            transform: [{ translateX: pan.x }, { translateY: pan.y }]
-          }}
-          {...panResponder.panHandlers}
-        >
+          style={[
+            { transform: [{ translateX: pan.x }, { translateY: pan.y }] },
+            { opacity: opacity }
+          ]}
+          {...panResponder.panHandlers} >
           <View style={BOX} />
         </Animated.View>
-      </View>
-      <View style={DROPZONE}>
-        <Text style={TEXT_STYLE}>Drop them here!</Text>
       </View>
     </Screen>
   )
