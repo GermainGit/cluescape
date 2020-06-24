@@ -39,7 +39,7 @@ export const HelpEnigma: React.FunctionComponent<HelpEnigmaProps> = props => {
   const askHelp = function() {
     const remaining = enigmaStore.remaining()
     const enigma = remaining
-      ? enigmaStore.find(enigmaStore.currentEnigmaName)
+      ? enigmaStore.findByName(enigmaStore.currentEnigmaName)
       : enigmaStore.enigmaEnd()
 
     const help = (props.isEnigma && enigma) || !remaining

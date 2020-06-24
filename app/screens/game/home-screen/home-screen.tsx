@@ -1,12 +1,10 @@
 import * as React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, ImageStyle, ViewStyle } from "react-native"
-import { Screen } from "../../../components"
-import { color } from "../../../theme"
+import { Alert, Image, ImageStyle, Modal, StyleSheet, View, ViewStyle } from "react-native"
+import { Button, HelpQuit, Inventory, Screen } from "../../../components"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../models/root-store"
-// import QRCodeScanner from 'react-native-qrcode-scanner'
 import { RNCamera } from "react-native-camera"
 
 export interface GameHomeScreenProps {
@@ -54,26 +52,36 @@ const ModalContainerView: ViewStyle = {
 }
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
   flex: 1,
   justifyContent: "center",
-  alignItems: "center",
 }
 
-export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
-  const store = useStores()
-  let camera;
+const styles = StyleSheet.create({
+  preview: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+})
 
-  const launchEnigma = React.useMemo(
-    () => () => {
-      const enigma = store.enigmaStore.next()
-      if (enigma.isEnigmaEnd()) {
-        Alert.alert('End', 'Fin du jeu !')
+export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
+  const enigmaStore = useStores().enigmaStore
+  let camera
+
+  const launchEnigma = ({ barcodes }) => {
+    barcodes.forEach(barcode => {
+      const enigma = enigmaStore.get(barcode.data)
+      if (enigma) {
+        if (!enigma.isFinish) {
+          props.navigation.navigate(enigma.screen)
+        } else if (!enigmaStore.remaining() && enigma.isEnigmaEnd()) {
+          props.navigation.navigate(enigma.screen)
+        }
       } else {
-        props.navigation.navigate(enigma.screen)
+        Alert.alert('?', 'L\'appareil ne semble pas réagir.')
       }
-    },
-    [props.navigation])
+    })
+  }
 
   const [inventoryVisible, setInventoryVisible] = useState(false)
 
@@ -87,32 +95,37 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
         ref={ref => {
           camera = ref
         }}
+        style={styles.preview}
         type={RNCamera.Constants.Type.back}
         flashMode={RNCamera.Constants.FlashMode.on}
         onGoogleVisionBarcodesDetected={launchEnigma}
+        captureAudio={false}
       >
+        <Modal
+          animationType={"fade"}
+          visible={inventoryVisible}
+          transparent={true}
+        >
+          <View style={ModalContainerView}>
+            <Inventory visible={setInventoryVisible}/>
+          </View>
+        </Modal>
+
+        <View style={ROOT}>
+          <HelpQuit parentScreenNavProp={props.navigation} isEnigma={false}/>
+
+          <View style={ScannerImageView}>
+            <Image style={ScannerImage} source={require("./scanner.png")}/>
+            <View style={ScannerMiddleView}/>
+          </View>
+
+          <Button style={InventoryView} onPress={openInventory}>
+            <Image source={require("./inventory.png")}/>
+          </Button>
+        </View>
+
       </RNCamera>
 
-      {/*<Modal*/}
-      {/*  animationType={"fade"}*/}
-      {/*  visible={inventoryVisible}*/}
-      {/*  transparent={true}*/}
-      {/*>*/}
-      {/*  <View style={ModalContainerView}>*/}
-      {/*    <Inventory visible={setInventoryVisible}/>*/}
-      {/*  </View>*/}
-      {/*</Modal>*/}
-
-      {/*<HelpQuit parentScreenNavProp={props.navigation} isEnigma={false}/>*/}
-
-      {/*<View style={ScannerImageView}>*/}
-      {/*  <Image style={ScannerImage} source={require("./scanner.png")}/>*/}
-      {/*  <View style={ScannerMiddleView}/>*/}
-      {/*</View>*/}
-
-      {/*<Button style={InventoryView} onPress={openInventory}>*/}
-      {/*  <Image source={require("./inventory.png")}/>*/}
-      {/*</Button>*/}
     </Screen>
   )
 })
