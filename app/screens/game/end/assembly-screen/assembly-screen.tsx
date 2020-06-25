@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, Animated, TextStyle, PanResponder } from "react-native"
+import { ViewStyle, View, Animated, TextStyle, PanResponder, PanResponderGestureState } from "react-native"
 import { Screen, Text } from "../../../../components"
 // import { useStores } from "../models/root-store"
 import { color } from "../../../../theme"
@@ -22,6 +22,7 @@ const BOX: ViewStyle = {
 }
 
 const CONTAINER: ViewStyle = {
+  flex: 1,
   alignItems: "center",
   justifyContent: "center"
 }
@@ -49,12 +50,18 @@ const DROPZONE: ViewStyle = {
   backgroundColor: "#00334d"
 }
 
-export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer((props) => {
+function isDropArea(gesture: PanResponderGestureState) {
+  return gesture.moveY < 200
+}
+
+function Item() {
+  // const ADAPTED = selected ? SELECTED_ITEM : NOT_SELECTED_ITEM
+
   const [showDraggable, setShowDraggable] = React.useState(true)
 
-  const opacity = React.useRef(new Animated.Value(1)).current
+  const pan = React.useRef(new Animated.ValueXY({ x: 0, y: 0 })).current
 
-  const pan = React.useRef(new Animated.ValueXY()).current
+  const opacity = React.useRef(new Animated.Value(1)).current
 
   const panResponder = React.useRef(
     PanResponder.create({
@@ -66,21 +73,35 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
         ]
       ),
       onPanResponderRelease: (e, gesture) => {
-        if (gesture.moveY < 220) {
+        if (isDropArea(gesture)) {
           Animated.timing(opacity, {
             toValue: 0,
             duration: 1000
           }).start(() => setShowDraggable(false))
         } else {
-          Animated.spring(
-            pan,
-            { toValue: { x: 0, y: 0 } }
-          ).start()
+          Animated.spring(pan, {
+            toValue: { x: 0, y: 0 },
+            friction: 5
+          }).start()
         }
       }
     })
   ).current
 
+  return (
+    (showDraggable) &&
+    (<Animated.View
+      style={[
+        { transform: [{ translateX: pan.x }, { translateY: pan.y }] },
+        { opacity: opacity },
+        BOX
+      ]}
+      {...panResponder.panHandlers} >
+    </Animated.View>)
+  )
+}
+
+export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer((props) => {
   return (
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="gameEndAssemblyScreen.header" />
@@ -88,15 +109,10 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
         <Text style={ TEXT_STYLE }>Drop them here!</Text>
       </View>
       <View style={CONTAINER}>
-        <Text style={TITLE_TEXT}>Drag this box!</Text>
-        <Animated.View
-          style={[
-            { transform: [{ translateX: pan.x }, { translateY: pan.y }] },
-            { opacity: opacity }
-          ]}
-          {...panResponder.panHandlers} >
-          <View style={BOX} />
-        </Animated.View>
+        <Text style={TITLE_TEXT}>Drag these box!</Text>
+        <Item></Item>
+        <Item></Item>
+        <Item></Item>
       </View>
     </Screen>
   )
