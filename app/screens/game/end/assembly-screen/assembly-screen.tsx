@@ -1,10 +1,10 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, Animated, TextStyle, PanResponder, PanResponderGestureState } from "react-native"
-import { Screen, Text } from "../../../../components"
-// import { useStores } from "../models/root-store"
+import { Animated, PanResponder, PanResponderGestureState, TextStyle, View, ViewStyle } from "react-native"
+import { Item, Screen, Text } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
+import { useStores } from "../../../../models/root-store"
 
 export interface GameEndAssemblyScreenProps {
   navigation: NavigationScreenProp<{}>,
@@ -54,9 +54,8 @@ function isDropArea(gesture: PanResponderGestureState) {
   return gesture.moveY < 200
 }
 
-function Item() {
+function Dragable(props) {
   // const ADAPTED = selected ? SELECTED_ITEM : NOT_SELECTED_ITEM
-
   const [showDraggable, setShowDraggable] = React.useState(true)
 
   const pan = React.useRef(new Animated.ValueXY({ x: 0, y: 0 })).current
@@ -93,15 +92,17 @@ function Item() {
     (<Animated.View
       style={[
         { transform: [{ translateX: pan.x }, { translateY: pan.y }] },
-        { opacity: opacity },
-        BOX
+        { opacity: opacity }
       ]}
       {...panResponder.panHandlers} >
+      <Item item={props.item}></Item>
     </Animated.View>)
   )
 }
 
 export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer((props) => {
+  const itemStore = useStores().itemStore
+
   return (
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="gameEndAssemblyScreen.header" />
@@ -110,9 +111,9 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
       </View>
       <View style={CONTAINER}>
         <Text style={TITLE_TEXT}>Drag these box!</Text>
-        <Item></Item>
-        <Item></Item>
-        <Item></Item>
+        { itemStore.items.map(item => (
+          <Dragable item={item}/>
+        ))}
       </View>
     </Screen>
   )
