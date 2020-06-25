@@ -30,7 +30,7 @@ const enigmas: EnigmaType[] = [
     help: "Il ne faut pas relacher l'effort. Pas si proche du but... Il faut désormais raccorder les morceaux pour comprendre ce qu'il se trame...",
     code: "cluefinal",
     item: 0,
-    screen: "",
+    screen: "gameEndAssemblyScreen",
     isFinish: true,
   },
 ]
@@ -99,10 +99,11 @@ export const EnigmaStoreModel = types
 
     get(code: string): EnigmaType|null {
       if (!this.remaining()) {
-        return null
+        const enigma = this.enigmaEnd()
+        return enigma.code === code ? enigma : null
       }
 
-      const enigma = enigmas.filter(enigma => enigma.code.toLowerCase() === code.toLowerCase())[0]
+      const enigma = self.enigmas.filter(enigma => enigma.code.toLowerCase() === code.toLowerCase())[0]
       self.currentEnigmaName = enigma.name
 
       return enigma

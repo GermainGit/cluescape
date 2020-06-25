@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, Image, ImageStyle, Modal, StyleSheet, View, ViewStyle } from "react-native"
+import { Dimensions, Image, ImageStyle, Modal, StyleSheet, View, ViewStyle } from "react-native"
 import { Button, HelpQuit, Inventory, Screen } from "../../../components"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../models/root-store"
@@ -65,6 +65,15 @@ const styles = StyleSheet.create({
 })
 
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
+  const CAM_VIEW_HEIGHT = Dimensions.get('screen').width * 1.5
+  const CAM_VIEW_WIDTH = Dimensions.get('screen').width
+
+  const leftMargin = (CAM_VIEW_WIDTH - 250) / 2
+  const topMargin = (CAM_VIEW_HEIGHT - 250) / 2
+
+  const scanAreaX = leftMargin / CAM_VIEW_HEIGHT
+  const scanAreaY = topMargin / CAM_VIEW_WIDTH
+
   const enigmaStore = useStores().enigmaStore
   let camera
 
@@ -77,8 +86,6 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
         } else if (!enigmaStore.remaining() && enigma.isEnigmaEnd()) {
           props.navigation.navigate(enigma.screen)
         }
-      } else {
-        Alert.alert('?', 'L\'appareil ne semble pas réagir.')
       }
     })
   }
@@ -94,6 +101,11 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
       <RNCamera
         ref={ref => {
           camera = ref
+        }}
+        rectOfInterest={{ x: scanAreaX, y: scanAreaY, width: 0.5, height: 0.5 }}
+        cameraViewDimensions={{
+          width: CAM_VIEW_WIDTH,
+          height: CAM_VIEW_HEIGHT,
         }}
         style={styles.preview}
         type={RNCamera.Constants.Type.back}
