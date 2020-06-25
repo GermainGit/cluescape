@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Dimensions, Image, ImageStyle, Modal, StyleSheet, View, ViewStyle } from "react-native"
+import { Dimensions, Image, ImageStyle, Modal, View, ViewStyle } from "react-native"
 import { Button, HelpQuit, Inventory, Screen } from "../../../components"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../models/root-store"
@@ -56,14 +56,6 @@ const ROOT: ViewStyle = {
   justifyContent: "center",
 }
 
-const styles = StyleSheet.create({
-  preview: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-})
-
 export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = observer((props) => {
   const CAM_VIEW_HEIGHT = Dimensions.get('screen').width * 1.5
   const CAM_VIEW_WIDTH = Dimensions.get('screen').width
@@ -107,7 +99,7 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
           width: CAM_VIEW_WIDTH,
           height: CAM_VIEW_HEIGHT,
         }}
-        style={styles.preview}
+        style={ROOT}
         type={RNCamera.Constants.Type.back}
         flashMode={RNCamera.Constants.FlashMode.on}
         onGoogleVisionBarcodesDetected={launchEnigma}
