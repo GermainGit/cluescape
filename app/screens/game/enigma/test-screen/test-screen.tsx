@@ -70,7 +70,7 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
       done: false,
     },
   ]
-  const [nextSequenceValue, setNextSequenceValue] = React.useState(series[0].value)
+  const [nextSequenceValue, setNextSequenceValue] = React.useState(0)
   let calibration = null
   let next = 0
   let started = false
@@ -108,6 +108,7 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
 
   const manageSensor = function() {
     if (!started) {
+      setNextSequenceValue(series[0].value)
       subscription = magnetometer
         .pipe(
           map(({ x }) => {
@@ -127,7 +128,7 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
     } else {
       subscription.unsubscribe()
       next = 0
-      setNextSequenceValue(series[0].value)
+      setNextSequenceValue(0)
       calibration = 0
     }
     started = !started
