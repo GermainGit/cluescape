@@ -1,7 +1,6 @@
 import { Instance, types } from "mobx-state-tree"
 
 const items: ItemType[] = [
-  { id: 0, name: "screw" },
   { id: 1, name: "monitor" },
   { id: 2, name: "usb" },
   { id: 3, name: "controller" },
