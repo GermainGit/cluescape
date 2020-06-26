@@ -2,7 +2,6 @@ import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle, View, Animated, TextStyle, PanResponder, PanResponderGestureState } from "react-native"
 import { Screen, Text } from "../../../../components"
-// import { useStores } from "../models/root-store"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 
@@ -101,7 +100,7 @@ function Item() {
   )
 }
 
-export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer((props) => {
+export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer(() => {
   return (
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="gameEndAssemblyScreen.header" />
