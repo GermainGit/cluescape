@@ -126,6 +126,9 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
         )
     } else {
       subscription.unsubscribe()
+      next = 0
+      setNextSequenceValue(series[0].value)
+      calibration = 0
     }
     started = !started
   }
