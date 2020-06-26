@@ -1,10 +1,10 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, StyleSheet, TouchableWithoutFeedback, View, ViewStyle } from "react-native"
-import { Screen, Text } from "../../../../components"
+import { Alert, StyleSheet, View, ViewStyle } from "react-native"
+import { Button, Screen, Text } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
-import { gyroscope, SensorTypes, setUpdateIntervalForType } from "react-native-sensors"
+import { magnetometer, SensorTypes, setUpdateIntervalForType } from "react-native-sensors"
 import { filter, map } from "rxjs/operators"
 
 const styles = StyleSheet.create({
@@ -52,25 +52,26 @@ function Item({ name, value }) {
 }
 
 export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((props) => {
-  const [coords, setCoords] = React.useState({ rotate: 0, value: 0, next: 1 })
   const series = [
     {
-      value: 4,
+      value: 40,
       done: false,
     },
     {
-      value: -1,
+      value: -10,
       done: false,
     },
     {
-      value: 2,
+      value: 20,
       done: false,
     },
     {
-      value: -3,
+      value: -30,
       done: false,
     },
   ]
+  const [nextSequenceValue, setNextSequenceValue] = React.useState(series[0].value)
+  let calibration = null
   let next = 0
   let started = false
   let subscription = null
@@ -80,7 +81,6 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
   const nextSeriesValue = function() {
     if (next < series.length) {
       const sequence = series[next]
-      console.log({ sequence: sequence, boolean: !sequence.done && next < series.length })
       if (!sequence.done) {
         return sequence.value
       }
@@ -93,28 +93,35 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
     const value = nextSeriesValue()
     if (value === null) {
       subscription.unsubscribe()
-      Alert.alert('Finish', 'Terminé')
+      Alert.alert("Finish", "Coffre ouvert")
     }
 
-    const validate = value > 0 ? rotate >= value : rotate <= value
+    const validate = value > 0 ? rotate === value : rotate === value
     if (validate) {
       series[next].done = true
       next++
     }
-    console.log({ rotate: rotate, next: next, validate: validate, value: nextSeriesValue() })
-    return { rotate: rotate, value: nextSeriesValue(), next: next, validate: validate }
+
+    // console.log({ rotate: rotate, next: next, validate: validate, value: nextSeriesValue() })
+    return { value: nextSeriesValue(), next: next, validate: validate }
   }
 
   const manageSensor = function() {
     if (!started) {
-      subscription = gyroscope
+      subscription = magnetometer
         .pipe(
-          map(({ z }) => validateSeries(z)),
+          map(({ x }) => {
+            if (calibration === null) {
+              calibration = Math.round(x)
+            }
+
+            return validateSeries(Math.round(x))
+          }),
           filter(sequence => sequence.validate === true),
         )
         .subscribe(
           sequence => {
-            setCoords({ rotate: sequence.rotate, value: sequence.value, next: sequence.next })
+            setNextSequenceValue(sequence.value)
           },
         )
     } else {
@@ -125,17 +132,16 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
 
   return (
     <Screen style={ROOT} preset="scroll">
-      <TouchableWithoutFeedback onPress={manageSensor}>
-        <View style={styles.container}>
-          <Text preset="header" tx="testScreen.header"/>
-          <Text style={styles.headline}>
-            Gyroscope values
-          </Text>
-          {/* <Item name="rot" value={coords.rotate}/> */}
-          <Item name="next" value={coords.value}/>
-          <Item name="num" value={coords.next}/>
-        </View>
-      </TouchableWithoutFeedback>
+
+      <View style={styles.container}>
+        <Text preset="header" tx="testScreen.header"/>
+        <Text style={styles.headline}>
+          Gyroscope values
+        </Text>
+        <Item name="next" value={nextSequenceValue}/>
+      </View>
+
+      <Button onPress={manageSensor} text={"Start/Stop"}></Button>
     </Screen>
   )
 })
