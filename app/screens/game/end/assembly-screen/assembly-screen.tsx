@@ -47,7 +47,7 @@ function isDropArea(gesture: PanResponderGestureState) {
   return gesture.moveY < 200
 }
 
-function Dragable(props) {
+function Draggable(props) {
   // const ADAPTED = selected ? SELECTED_ITEM : NOT_SELECTED_ITEM
   const [showDraggable, setShowDraggable] = React.useState(true)
 
@@ -88,7 +88,7 @@ function Dragable(props) {
         { opacity: opacity }
       ]}
       {...panResponder.panHandlers} >
-      <Dragable item={props.item}></Dragable>
+      <Draggable item={props.item}></Draggable>
     </Animated.View>)
   )
 }
