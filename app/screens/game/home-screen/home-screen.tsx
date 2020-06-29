@@ -6,6 +6,7 @@ import { Button, HelpQuit, Inventory, Screen } from "../../../components"
 import { color } from "../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../models/root-store"
+
 export interface GameHomeScreenProps {
   navigation: NavigationScreenProp<{}>
 }
@@ -77,10 +78,6 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
     launchEnigma()
   }
 
-  const redirectTest = function() {
-    props.navigation.navigate("testScreen")
-  }
-
   return (
     <Screen style={ROOT} preset="fixed">
       <Modal
@@ -104,9 +101,6 @@ export const GameHomeScreen: React.FunctionComponent<GameHomeScreenProps> = obse
 
       <Button style={InventoryView} onPress={openInventory}>
         <Image source={require("./inventory.png")}/>
-      </Button>
-
-      <Button onPress={redirectTest}>
       </Button>
     </Screen>
   )

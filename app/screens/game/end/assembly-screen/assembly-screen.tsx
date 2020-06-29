@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { Animated, PanResponder, PanResponderGestureState, TextStyle, View, ViewStyle } from "react-native"
-import { Screen, Text } from "../../../../components"
+import { Item, Screen, Text } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../../models/root-store"
@@ -88,7 +88,7 @@ function Draggable(props) {
         { opacity: opacity }
       ]}
       {...panResponder.panHandlers} >
-      <Draggable item={props.item}></Draggable>
+      <Item item={props.item}/>
     </Animated.View>)
   )
 }
@@ -105,7 +105,8 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
       <View style={CONTAINER}>
         <Text style={TITLE_TEXT}>Drag these box!</Text>
         { itemStore.items.map(item => (
-          <Dragable item={item}/>
+          // eslint-disable-next-line react/jsx-key
+          <Draggable item={item}/>
         ))}
       </View>
     </Screen>

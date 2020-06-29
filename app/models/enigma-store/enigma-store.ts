@@ -14,10 +14,10 @@ const enigmas: EnigmaType[] = [
     screen: "gameEnigmaQuizzScreen",
   },
   {
-    name: "RightMoves",
-    help: "Be as discreet as possible so as not to be spotted.",
+    name: "Safebox",
+    help: "Find the code to open the safebox.",
     item: 3,
-    screen: "gameEnigmaQuizzScreen",
+    screen: "safeBoxScreen",
   },
   {
     name: "End",
