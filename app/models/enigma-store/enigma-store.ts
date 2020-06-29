@@ -77,9 +77,13 @@ export const EnigmaStoreModel = types
 
     enigmaEnd() {
       const lastEnigma = self.enigmas[self.enigmas.length - 1]
-      self.currentEnigmaName = lastEnigma.name
+      if (lastEnigma) {
+        self.currentEnigmaName = lastEnigma.name
 
-      return lastEnigma
+        return lastEnigma
+      }
+
+      return null
     },
 
     remaining: function() {
@@ -92,9 +96,13 @@ export const EnigmaStoreModel = types
       }
 
       const next = self.enigmas.filter(enigma => !enigma.isFinish)[Math.floor(Math.random() * this.remaining())]
-      self.currentEnigmaName = next.name
+      if (next) {
+        self.currentEnigmaName = next.name
 
-      return next
+        return next
+      }
+
+      return null
     },
 
     get(code: string): EnigmaType|null {
@@ -104,9 +112,13 @@ export const EnigmaStoreModel = types
       }
 
       const enigma = self.enigmas.filter(enigma => enigma.code.toLowerCase() === code.toLowerCase())[0]
-      self.currentEnigmaName = enigma.name
+      if (enigma) {
+        self.currentEnigmaName = enigma.name
 
-      return enigma
+        return enigma
+      }
+
+      return null
     },
 
     findByName(name: string): EnigmaType {
