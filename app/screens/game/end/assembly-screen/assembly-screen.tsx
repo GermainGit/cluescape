@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { Animated, PanResponder, PanResponderGestureState, TextStyle, View, ViewStyle } from "react-native"
-import { Screen, Text, Item } from "../../../../components"
+import { Item, Screen, Text } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../../models/root-store"
@@ -88,7 +88,7 @@ function Draggable(props) {
         { opacity: opacity }
       ]}
       {...panResponder.panHandlers} >
-      <Draggable item={props.item}></Draggable>
+      <Item item={props.item}></Item>
     </Animated.View>)
   )
 }
