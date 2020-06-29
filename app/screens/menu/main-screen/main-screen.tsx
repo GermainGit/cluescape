@@ -4,6 +4,7 @@ import { Image, ImageBackground, ImageStyle, TextStyle, View, ViewStyle } from "
 import { Button, Screen } from "../../../components"
 import { color } from "../../../theme"
 import { NavigationScreenProp } from "react-navigation"
+import { useStores } from "../../../models/root-store"
 
 export interface MenuMainScreenProps {
   navigation: NavigationScreenProp<{}>
@@ -82,10 +83,13 @@ const ImageBackgroundStyle: ImageStyle = {
 }
 
 export const MenuMainScreen: React.FunctionComponent<MenuMainScreenProps> = observer((props) => {
-  const launchGame = React.useMemo(() => () =>
-    props.navigation.navigate("gameHomeScreen"), [
-    props.navigation,
-  ])
+  const store = useStores()
+  const launchGame = React.useMemo(() => () => {
+    store.reset()
+    props.navigation.navigate("gameHomeScreen")
+  },
+  [props.navigation],
+  )
 
   const showActionImage = true
 
