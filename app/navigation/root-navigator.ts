@@ -13,13 +13,13 @@ import {
   MenuSettingsCguScreen,
   MenuSettingsNoticeScreen,
   MenuSettingsSettingsScreen,
-  TestScreen,
+  SafeboxScreen,
 } from "../screens" // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export const RootNavigator = createStackNavigator(
   {
     primaryStack: { screen: PrimaryNavigator },
-    testScreen: { screen: TestScreen },
+    safeBoxScreen: { screen: SafeboxScreen },
     gameEnigmaEndFinishScreen: { screen: GameEnigmaEndFinishScreen },
     menuMainScreen: { screen: MenuMainScreen },
     gameEndAssemblyScreen: { screen: GameEndAssemblyScreen },

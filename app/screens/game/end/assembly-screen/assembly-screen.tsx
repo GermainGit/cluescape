@@ -88,7 +88,7 @@ function Draggable(props) {
         { opacity: opacity }
       ]}
       {...panResponder.panHandlers} >
-      <Item item={props.item}></Item>
+      <Draggable item={props.item}></Draggable>
     </Animated.View>)
   )
 }
@@ -106,7 +106,7 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
         <Text style={TITLE_TEXT}>Drag these box!</Text>
         { itemStore.items.map(item => (
           // eslint-disable-next-line react/jsx-key
-          <Draggable item={item}></Draggable>
+          <Draggable item={item}/>
         ))}
       </View>
     </Screen>

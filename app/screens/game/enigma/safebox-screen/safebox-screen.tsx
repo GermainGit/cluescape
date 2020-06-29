@@ -1,16 +1,16 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, StyleSheet, View, ViewStyle } from "react-native"
-import { Button, Screen, Text } from "../../../../components"
+import { Button, HelpQuit, Screen, Text } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { magnetometer, SensorTypes, setUpdateIntervalForType } from "react-native-sensors"
 import { filter, map } from "rxjs/operators"
+import { useStores } from "../../../../models/root-store"
 
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    flex: 1,
     justifyContent: "center",
   },
   headline: {
@@ -30,6 +30,9 @@ const styles = StyleSheet.create({
   valueValue: {
     fontSize: 20,
     width: 200,
+  },
+  wrapper: {
+    top: 150
   },
 })
 
@@ -51,7 +54,11 @@ function Item({ name, value }) {
   )
 }
 
-export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((props) => {
+export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer((props) => {
+  const store = useStores()
+  const enigma = store.enigmaStore.find(store.enigmaStore.currentEnigmaName)
+  store.itemStore.setReward(enigma.item)
+
   const series = [
     {
       value: 40,
@@ -70,8 +77,7 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
       done: false,
     },
   ]
-  const [nextSequenceValue, setNextSequenceValue] = React.useState(series[0].value)
-  let calibration = null
+  const [nextSequenceValue, setNextSequenceValue] = React.useState(0)
   let next = 0
   let started = false
   let subscription = null
@@ -93,7 +99,18 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
     const value = nextSeriesValue()
     if (value === null) {
       subscription.unsubscribe()
-      Alert.alert("Finish", "Coffre ouvert")
+      Alert.alert(
+        "Finish",
+        "Coffre ouvert",
+        [
+          {
+            text: "OK",
+            onPress: function() {
+              store.enigmaStore.finish(enigma)
+              props.navigation.navigate("gameEnigmaEndFinishScreen")
+            },
+          },
+        ])
     }
 
     const validate = value > 0 ? rotate === value : rotate === value
@@ -108,15 +125,10 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
 
   const manageSensor = function() {
     if (!started) {
+      setNextSequenceValue(series[0].value)
       subscription = magnetometer
         .pipe(
-          map(({ x }) => {
-            if (calibration === null) {
-              calibration = Math.round(x)
-            }
-
-            return validateSeries(Math.round(x))
-          }),
+          map(({ x }) => validateSeries(Math.round(x))),
           filter(sequence => sequence.validate === true),
         )
         .subscribe(
@@ -127,24 +139,27 @@ export const TestScreen: React.FunctionComponent<TestScreenProps> = observer((pr
     } else {
       subscription.unsubscribe()
       next = 0
-      setNextSequenceValue(series[0].value)
-      calibration = 0
+      setNextSequenceValue(0)
     }
     started = !started
   }
 
+  // TODO: add callback for on quit to add custom reset (unsuscribe)
+
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
+      <HelpQuit parentScreenNavProp={props.navigation}/>
 
       <View style={styles.container}>
-        <Text preset="header" tx="testScreen.header"/>
-        <Text style={styles.headline}>
-          Gyroscope values
-        </Text>
-        <Item name="next" value={nextSequenceValue}/>
+        <View style={styles.wrapper}>
+          <Text style={styles.headline}>
+            Open the safe box !
+          </Text>
+          <Item name="next" value={nextSequenceValue}/>
+          <Button onPress={manageSensor} text={"Start/Stop"}></Button>
+        </View>
       </View>
 
-      <Button onPress={manageSensor} text={"Start/Stop"}></Button>
     </Screen>
   )
 })
