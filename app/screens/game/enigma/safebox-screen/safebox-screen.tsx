@@ -56,7 +56,7 @@ function Item({ name, value }) {
 
 export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer((props) => {
   const store = useStores()
-  const enigma = store.enigmaStore.find(store.enigmaStore.currentEnigmaName)
+  const enigma = store.enigmaStore.findByName(store.enigmaStore.currentEnigmaName)
   store.itemStore.setReward(enigma.item)
 
   const series = [
