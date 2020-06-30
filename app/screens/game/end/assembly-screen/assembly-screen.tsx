@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { Animated, PanResponder, PanResponderGestureState, TextStyle, View, ViewStyle } from "react-native"
-import { Screen, Text, Item } from "../../../../components"
+import { Screen, Text, Item, Wallpaper } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
 import { useStores } from "../../../../models/root-store"
@@ -18,6 +18,10 @@ const CONTAINER: ViewStyle = {
   flex: 1,
   alignItems: "center",
   justifyContent: "center"
+}
+
+const FULL: ViewStyle = {
+  flex: 1
 }
 
 const TITLE_TEXT: TextStyle = {
@@ -40,14 +44,15 @@ const DROPZONE: ViewStyle = {
   position: "relative",
   top: 0,
   height: 200,
-  backgroundColor: "#00334d"
+  backgroundColor: "#00334d",
+  opacity: 0.4
 }
 
 function isDropArea(gesture: PanResponderGestureState) {
   return gesture.moveY < 200
 }
 
-function Draggable(props) {
+function Draggable(props, onDrop) {
   // const ADAPTED = selected ? SELECTED_ITEM : NOT_SELECTED_ITEM
   const [showDraggable, setShowDraggable] = React.useState(true)
 
@@ -69,7 +74,9 @@ function Draggable(props) {
           Animated.timing(opacity, {
             toValue: 0,
             duration: 1000
-          }).start(() => setShowDraggable(false))
+          }).start(() => {
+            setShowDraggable(false)
+          })
         } else {
           Animated.spring(pan, {
             toValue: { x: 0, y: 0 },
@@ -96,17 +103,20 @@ function Draggable(props) {
 export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScreenProps> = observer((props) => {
   const itemStore = useStores().itemStore
 
+  const imageSource = require("./moteur_propre.jpg")
   return (
     <Screen style={ROOT} preset="fixed">
+      <Wallpaper backgroundImage={imageSource}/>
       <Text preset="header" tx="gameEndAssemblyScreen.header" />
       <View style={DROPZONE}>
-        <Text style={ TEXT_STYLE }>Drop them here!</Text>
+        <Text style={ TEXT_STYLE }>Pose tes éléments dans cette zone!</Text>
       </View>
       <View style={CONTAINER}>
-        <Text style={TITLE_TEXT}>Drag these box!</Text>
+        <Text style={TITLE_TEXT}>Inventaire</Text>
         { itemStore.items.map(item => (
           // eslint-disable-next-line react/jsx-key
-          <Draggable item={item}></Draggable>
+          <Draggable item={item}>
+          </Draggable>
         ))}
       </View>
     </Screen>

@@ -187,24 +187,24 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
   const answers = [
     {
       id: "0",
-      title: "Once",
+      title: "De rien",
     },
     {
       id: "1",
-      title: "Twice",
+      title: "Certaines choses",
     },
     {
       id: '2',
-      title: 'Never',
+      title: 'Il ne faut jamais douter',
     },
     {
       id: '3',
-      title: 'I always react',
+      title: "Que ce que l'on sait est une goutte d'eau",
     }
   ]
 
   const question = {
-    title: "Have you ever try React ?",
+    title: "De quoi peut-on être sûr?",
   }
 
   const [selected, setSelected] = React.useState(new Map())
