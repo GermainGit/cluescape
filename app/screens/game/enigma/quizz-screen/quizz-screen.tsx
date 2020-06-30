@@ -180,8 +180,7 @@ export interface GameEnigmaQuizzScreenProps {
 
 export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScreenProps> = observer((props) => {
   const store = useStores()
-
-  const enigma = store.enigmaStore.find(store.enigmaStore.currentEnigmaName)
+  const enigma = store.enigmaStore.findByName(store.enigmaStore.currentEnigmaName)
   store.itemStore.setReward(enigma.item)
 
   const answers = [
@@ -228,7 +227,7 @@ export const GameEnigmaQuizzScreen: React.FunctionComponent<GameEnigmaQuizzScree
         Alert.alert("La réponse est fausse")
       }
     },
-    [props.navigation, selected],
+    [props.navigation, selected, enigma],
   )
 
   return (

@@ -115,8 +115,7 @@ export const GameEndAssemblyScreen: React.FunctionComponent<GameEndAssemblyScree
         <Text style={TITLE_TEXT}>Inventaire</Text>
         { itemStore.items.map(item => (
           // eslint-disable-next-line react/jsx-key
-          <Draggable item={item}>
-          </Draggable>
+          <Draggable item={item}/>
         ))}
       </View>
     </Screen>
