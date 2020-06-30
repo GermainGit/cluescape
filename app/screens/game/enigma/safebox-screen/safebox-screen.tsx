@@ -1,10 +1,19 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, StyleSheet, View, ViewStyle } from "react-native"
-import { Button, HelpQuit, Screen, Text } from "../../../../components"
+import {
+  Alert,
+  Animated,
+  Easing,
+  ImageStyle,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from "react-native"
+import { HelpQuit, Screen, Text, Wallpaper } from "../../../../components"
 import { color } from "../../../../theme"
 import { NavigationScreenProp } from "react-navigation"
-import { magnetometer, SensorTypes, setUpdateIntervalForType } from "react-native-sensors"
+import { magnetometer } from "react-native-sensors"
 import { filter, map } from "rxjs/operators"
 import { useStores } from "../../../../models/root-store"
 
@@ -32,7 +41,7 @@ const styles = StyleSheet.create({
     width: 200,
   },
   wrapper: {
-    top: 150
+    top: 150,
   },
 })
 
@@ -44,12 +53,16 @@ const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
 }
 
+const ImageLocker: ImageStyle = {
+  height: 350,
+  width: 350,
+}
+
 function Item({ name, value }) {
-  const valueNumberized = Number(value)
   return (
     <View style={styles.valueContainer}>
       <Text style={styles.valueName}>{name}:</Text>
-      <Text style={styles.valueValue}>{Math.round(valueNumberized)}</Text>
+      <Text style={styles.valueValue}>{value}</Text>
     </View>
   )
 }
@@ -59,9 +72,37 @@ export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer(
   const enigma = store.enigmaStore.findByName(store.enigmaStore.currentEnigmaName)
   store.itemStore.setReward(enigma.item)
 
+  let calibration = 0
+  const rotateRatio = (360 / 160)
+  const spinLocker = new Animated.Value(0)
+  const spin = spinLocker.interpolate({
+    inputRange: [0, 360],
+    outputRange: ["0deg", "360deg"],
+  })
+
+  const spinAnimation = function(rotation) {
+    const rotate = (rotation - calibration) * rotateRatio
+    console.log(rotation)
+    Animated.timing(
+      spinLocker,
+      {
+        toValue: rotate,
+        duration: 500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      },
+    ).start()
+  }
+
+  const calibrate = function(firstValue) {
+    if (calibration === 0 && calibration !== firstValue) {
+      calibration = firstValue
+    }
+  }
+
   const series = [
     {
-      value: 40,
+      value: 30,
       done: false,
     },
     {
@@ -69,20 +110,22 @@ export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer(
       done: false,
     },
     {
-      value: 20,
+      value: 15,
       done: false,
     },
     {
-      value: -30,
+      value: -25,
       done: false,
     },
   ]
-  const [nextSequenceValue, setNextSequenceValue] = React.useState(0)
+  const [nextSequenceValue, setNextSequenceValue] = React.useState("0")
+  const [started, setStarted] = React.useState(false)
+  // const [subscription, setSubscription] = React.useState(null)
+
   let next = 0
-  let started = false
   let subscription = null
 
-  setUpdateIntervalForType(SensorTypes.accelerometer, 600)// defaults to 100ms
+  // setUpdateIntervalForType(SensorTypes.magnetometer, 600)// defaults to 100ms
 
   const nextSeriesValue = function() {
     if (next < series.length) {
@@ -95,22 +138,29 @@ export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer(
     return null
   }
 
+  const finish = function() {
+    subscription.unsubscribe()
+    Alert.alert(
+      "Finish",
+      "Coffre ouvert",
+      [
+        {
+          text: "OK",
+          onPress: function() {
+            store.enigmaStore.finish(enigma)
+            props.navigation.navigate("gameEnigmaEndFinishScreen")
+          },
+        },
+      ])
+  }
+
   const validateSeries = function(rotate) {
     const value = nextSeriesValue()
+
+    spinAnimation(rotate)
+
     if (value === null) {
-      subscription.unsubscribe()
-      Alert.alert(
-        "Finish",
-        "Coffre ouvert",
-        [
-          {
-            text: "OK",
-            onPress: function() {
-              store.enigmaStore.finish(enigma)
-              props.navigation.navigate("gameEnigmaEndFinishScreen")
-            },
-          },
-        ])
+      finish()
     }
 
     const validate = value > 0 ? rotate === value : rotate === value
@@ -125,29 +175,34 @@ export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer(
 
   const manageSensor = function() {
     if (!started) {
-      setNextSequenceValue(series[0].value)
+      setNextSequenceValue(series[0].value.toString())
       subscription = magnetometer
         .pipe(
-          map(({ x }) => validateSeries(Math.round(x))),
+          map(({ x }) => { calibrate(x); return validateSeries(Math.round(x)) }),
           filter(sequence => sequence.validate === true),
         )
         .subscribe(
           sequence => {
-            setNextSequenceValue(sequence.value)
+            if (sequence.value === null) {
+              setNextSequenceValue("")
+            } else {
+              setNextSequenceValue(sequence.value.toString())
+            }
           },
         )
     } else {
       subscription.unsubscribe()
       next = 0
-      setNextSequenceValue(0)
+      setNextSequenceValue("0")
     }
-    started = !started
+    setStarted(!started)
   }
 
   // TODO: add callback for on quit to add custom reset (unsuscribe)
 
   return (
     <Screen style={ROOT} preset="fixed">
+      <Wallpaper backgroundImage={require("./safebox.jpg")}/>
       <HelpQuit parentScreenNavProp={props.navigation}/>
 
       <View style={styles.container}>
@@ -156,7 +211,10 @@ export const SafeboxScreen: React.FunctionComponent<TestScreenProps> = observer(
             Open the safe box !
           </Text>
           <Item name="next" value={nextSequenceValue}/>
-          <Button onPress={manageSensor} text={"Start/Stop"}></Button>
+          <TouchableWithoutFeedback onPress={manageSensor}>
+            <Animated.Image style={[ImageLocker, { transform: [{ rotate: spin }] }]}
+              source={require("./safebox-locker.png")}/>
+          </TouchableWithoutFeedback>
         </View>
       </View>
 
